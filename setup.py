@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """keyutil package installation script"""
 
 from setuptools import setup, find_packages
