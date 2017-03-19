@@ -1,6 +1,9 @@
 libroman
 ========
 
+.. image:: https://travis-ci.org/lukassup/libroman.svg?branch=master
+    :target: https://travis-ci.org/lukassup/libroman
+
 libroman is a Python package which is used to convert Roman numerals to
 integers and vice versa.
 
