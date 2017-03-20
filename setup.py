@@ -40,4 +40,10 @@ setup(
     packages=find_packages(exclude=['tests']),
     test_suite='tests',
     zip_safe=True,
+    entry_points={
+        'console_scripts': [
+            'roman=libroman.cli:main',
+        ]
+    }
+
 )
