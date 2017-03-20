@@ -78,6 +78,7 @@ class TestRoman(unittest.TestCase):
             'VIV',
             'LXL',
             'DCD',
+            'IXIX',
         ]
         for numeral in tests:
             with self.assertRaises(InvalidRomanNumeralSequenceError):
