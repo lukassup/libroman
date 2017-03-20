@@ -19,19 +19,19 @@ class Roman(object):
 
     VALID = set('IVXLCDM')
     DIGITS = [
-        ('M', 1000),
-        ('CM', 900),
-        ('D', 500),
-        ('CD', 400),
-        ('C', 100),
-        ('XC', 90),
-        ('L', 50),
-        ('XL', 40),
-        ('X', 10),
-        ('IX', 9),
-        ('V', 5),
-        ('IV', 4),
-        ('I', 1),
+        ('M',  1000, 3),
+        ('CM',  900, 1),
+        ('D',   500, 1),
+        ('CD',  400, 1),
+        ('C',   100, 3),
+        ('XC',   90, 1),
+        ('L',    50, 1),
+        ('XL',   40, 1),
+        ('X',    10, 3),
+        ('IX',    9, 1),
+        ('V',     5, 1),
+        ('IV',    4, 1),
+        ('I',     1, 3),
     ]
 
     def __init__(self, number):
@@ -72,33 +72,33 @@ class Roman(object):
 
         :returns: int
         """
-        roman = roman
-        arabic = 0
+        if not roman:
+            raise InvalidRomanNumeralStringError(
+                    'Roman numeral cannot be blank.')
         # check if contains invalid numerals
         if not cls.VALID.issuperset(set(roman)):
             raise InvalidRomanNumeralStringError(
                     'Roman numeral contains invalid characters, '
                     'only MDCLXVI are allowed.')
-        if not roman:
-            # returns zero for blank Roman numeral strings and
-            # stops processing at this point
-            return arabic
-        for digit, value in cls.DIGITS:
+        _roman = roman
+        arabic = 0
+        for digit, value, repeat in cls.DIGITS:
             # count repeating Roman numerals
             seq = 0
-            while roman.startswith(digit):
+            while _roman.startswith(digit):
                 seq += 1
                 # ...as there can only be 1 consecutive two-digit numeral or 3
                 # single-digit Roman numerals
-                if (len(digit) > 1 and seq > 1) or (seq > 3):
+                if seq > repeat:
                     raise InvalidRomanNumeralSequenceError(
                             'There cannot be more than three consecutive Roman numerals '
                             'or more than one subtractive numeral combination (e.g. IX).')
                 arabic += value
                 # cut the numeral from the left by one digit and
                 # try another while loop
-                roman = roman[len(digit):]
-        if len(roman) > 0:
+                _roman = _roman[len(digit):]
+        # comparing the original with the reverse
+        if len(_roman) > 0 or cls.parse_int(arabic) != roman:
             raise InvalidRomanNumeralSequenceError(
                     'Roman numeral contains an invalid trailing sequence. '
                     'Maybe the numers are out of order?')
@@ -115,13 +115,10 @@ class Roman(object):
         if not 0 < arabic < 4000:
             raise OutOfBoundsNumberError(
                     'Valid Roman numerals are in the range of [1, 3999].')
-        for digit, value in cls.DIGITS:
-            if not arabic:
-                break
-            if arabic >= value:
-                num_digits = min(arabic // value, 3)
-                roman += digit * num_digits
-                arabic -= value * num_digits
+        for digit, value, _ in cls.DIGITS:
+            while arabic >= value:
+                roman += digit
+                arabic -= value
         return roman
 
     @classmethod

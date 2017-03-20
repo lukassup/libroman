@@ -43,6 +43,9 @@ class TestRoman(unittest.TestCase):
             ('C', 100),
             ('D', 500),
             ('M', 1000),
+            ('XIX', 19),
+            ('CXC', 190),
+            ('MCM', 1900),
             ('MMMCMXCIX', 3999),
         ]
         for numeral, value in tests:
@@ -72,6 +75,10 @@ class TestRoman(unittest.TestCase):
             'LLLL',
             'CDM',
             'MDMCLIV',
+            'VIV',
+            'LXL',
+            'DCD',
+            'IXIX',
         ]
         for numeral in tests:
             with self.assertRaises(InvalidRomanNumeralSequenceError):
